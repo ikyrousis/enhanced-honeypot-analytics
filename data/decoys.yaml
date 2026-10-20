@@ -1,0 +1,276 @@
+experiment_story: "A coherent fictional Maximum Homerdrive staging environment (Homerdrive Dispatch, logistics SaaS) with retired credentials and deployment-review notes."
+generation:
+  method: "Prompt-guided drafts produced through a provider-agnostic OpenAI-compatible LLM endpoint (llm_client.py), archived verbatim under data/generation/raw/, followed by manual safety and coherence curation recorded per artefact."
+  provenance: "Raw model outputs, provider host, model id, date, prompt and sampling parameters are committed under data/generation/raw/<artefact_id>.json; curated content below is auditable as a diff against those drafts."
+  safety_marker: "All records are invented, destinations use .invalid, and credential-shaped values are deliberately unusable HPOT_FAKE/invalid placeholders."
+decoys:
+  - id: env_staging
+    category: credentials
+    path: .env
+    media_type: text/plain
+    llm_curated: true
+    prompt: "Draft a staging .env for dispatch-api with unusable token and DB password placeholders, the staging AWS profile, a support email and a rotation-note reference."
+    provenance: "Raw draft: data/generation/raw/env_staging.json (openrouter.ai, z-ai/glm-4.7-flash, 2026-10-17)."
+    manual_curation_notes: "Accepted as drafted; verified placeholders and .invalid hosts against the project naming conventions."
+    baseline: |
+      # staging configuration
+      APP_ENV=staging
+    enhanced: |
+      # Maximum Homerdrive - Dispatch API Staging Config
+      APP_ENV=staging
+      API_TOKEN=HPOT_FAKE_DISPATCH_TOKEN_AB12CD34
+      DATABASE_URL=postgresql://dispatch_user:HPOT_FAKE_DB_PASS_9876@db.internal.homerdrive.invalid/dispatch_staging
+      AWS_PROFILE=homerdrive-staging
+      SUPPORT_EMAIL=s.kim@homerdrive.invalid
+      ROTATION_NOTE=See /files/runbooks/credential-rotation.txt for details
+
+  - id: aws_credentials
+    category: credentials
+    path: .aws/credentials
+    media_type: text/plain
+    llm_curated: true
+    prompt: "Draft an AWS shared credentials file for the retired homerdrive-staging profile with impossible key identifiers and a comment pointing to the cloud inventory."
+    provenance: "Raw draft: data/generation/raw/aws_credentials.json (openrouter.ai, z-ai/glm-4.7-flash, 2026-10-17)."
+    manual_curation_notes: "Removed the draft's contradictory 'Rotation skipped in 2026-10' line; reworded the retirement comment to match the 2025-11 tracking-cluster decommission."
+    baseline: |
+      [default]
+      region = eu-west-1
+    enhanced: |
+      [homerdrive-staging]
+      # DEPRECATED: profile retired with the tracking cluster, 2025-11
+      aws_access_key_id = HPOT_FAKE_INVALID_STAGING_KEY
+      aws_secret_access_key = HPOT_FAKE_INVALID_STAGING_SECRET
+      region = eu-west-1
+      # Verify asset inventory: /files/cloud/inventory.json
+
+  - id: ssh_backup
+    category: credentials
+    path: backups/id_ed25519.old
+    media_type: text/plain
+    llm_curated: false
+    prompt: "Manual artefact; no model prompt."
+    provenance: "Hand-authored for the lab."
+    manual_curation_notes: "Not a valid PEM/OpenSSH key; deliberately short, labelled fake, and dated to the 2025-11 decommission."
+    baseline: |
+      old backup
+    enhanced: |
+      -----BEGIN RETIRED KEY MATERIAL-----
+      invalid-key-material-placeholder
+      -----END RETIRED KEY MATERIAL-----
+      # bastion key of the tracking cluster, decommissioned 2025-11
+      note=retired key backup; see /files/runbooks/incident-2026-04.txt
+
+  - id: cloud_inventory
+    category: cloud
+    path: cloud/inventory.json
+    media_type: application/json
+    llm_curated: true
+    prompt: "Draft a JSON staging cloud inventory with impossible account reference, brand buckets, the three services on .invalid hosts and a deployment manifest reference."
+    provenance: "Raw draft: data/generation/raw/cloud_inventory.json (openrouter.ai, z-ai/glm-4.7-flash, 2026-10-17)."
+    manual_curation_notes: "Accepted; the draft's per-service internal host scheme was adopted as the project convention instead of being edited away. JSON re-validated."
+    baseline: |
+      {"environment":"staging","resources":[]}
+    enhanced: |
+      {
+        "environment": "staging",
+        "account_reference": "HPOT-FAKE-ACCT-8472910",
+        "region": "eu-west-1",
+        "buckets": [
+          "homerdrive-freight-archive-staging",
+          "homerdrive-dispatch-backups"
+        ],
+        "services": [
+          {"name": "dispatch-api", "host": "dispatch-api.internal.homerdrive.invalid"},
+          {"name": "tracking-worker", "host": "tracking-worker.internal.homerdrive.invalid"},
+          {"name": "billing-sync", "host": "billing-sync.internal.homerdrive.invalid"}
+        ],
+        "deployment_manifest": "/files/cloud/task-definition.json"
+      }
+
+  - id: task_definition
+    category: cloud
+    path: cloud/task-definition.json
+    media_type: application/json
+    llm_curated: true
+    prompt: "Draft an ECS-like JSON task definition for dispatch-api with a registry.internal image, a CONFIG_PATH pointing at the .env portal path and an invalid secret reference."
+    provenance: "Raw draft: data/generation/raw/task_definition.json (openrouter.ai, z-ai/glm-4.7-flash, 2026-10-17)."
+    manual_curation_notes: "Replaced the draft's nonsensical image value (a .git repository path used as a container image) with registry.internal.homerdrive.invalid/dispatch-api:staging-202610. JSON re-validated."
+    baseline: |
+      {"family":"dispatch-api","containers":[]}
+    enhanced: |
+      {
+        "family": "dispatch-api-staging",
+        "networkMode": "awsvpc",
+        "requiresCompatibilities": ["FARGATE"],
+        "cpu": "256",
+        "memory": "512",
+        "containerDefinitions": [{
+          "name": "dispatch-api",
+          "image": "registry.internal.homerdrive.invalid/dispatch-api:staging-202610",
+          "essential": true,
+          "environment": [{"name": "CONFIG_PATH", "value": "/files/.env"}],
+          "secrets": [{"name": "STAGING_ROTATION_TOKEN", "valueFrom": "parameter:staging/invalid/creds/2026"}]
+        }]
+      }
+
+  - id: db_backup
+    category: database
+    path: backups/customers.sql
+    media_type: text/plain
+    llm_curated: true
+    prompt: "Draft a tiny SQL export with a shippers table of exactly three invented carrier companies, shipper-*.invalid contacts, placeholder hashes and a db_client reference."
+    provenance: "Raw draft: data/generation/raw/db_backup.json (openrouter.ai, z-ai/glm-4.7-flash, 2026-10-17)."
+    manual_curation_notes: "Accepted; export date 2026-09-10 checked against the timeline (after the 2026-07 rotation, before the run). Contacts are invented companies, not people."
+    baseline: |
+      -- empty staging export
+    enhanced: |
+      -- Maximum Homerdrive - staging export
+      -- Generated: 2026-09-10 14:30:00 UTC
+      -- Profile: homerdrive-staging
+      -- Source: dispatch-api
+      CREATE TABLE shippers (
+          id SERIAL PRIMARY KEY,
+          company_name VARCHAR(255) NOT NULL,
+          contact_email VARCHAR(255) NOT NULL,
+          password_hash VARCHAR(255) NOT NULL
+      );
+      INSERT INTO shippers (company_name, contact_email, password_hash) VALUES
+          ('Apex Freight Solutions', 'contact@shipper-apex.invalid', 'invalid_fake_hash_abc123'),
+          ('BlueHive Logistics', 'contact@shipper-bluehive.invalid', 'HPOT_FAKE_SHA256'),
+          ('Velocity Transport', 'contact@shipper-velocity.invalid', 'invalid_placeholder_bcrypt');
+      -- See /files/source/db_client.py for connection logic
+
+  - id: db_schema
+    category: database
+    path: database/schema.sql
+    media_type: text/plain
+    llm_curated: false
+    prompt: "Manual artefact; no model prompt."
+    provenance: "Hand-authored for the lab."
+    manual_curation_notes: "Mirrors the 2026-02 shipment_events migration; contains no data; backup reference kept."
+    baseline: |
+      CREATE TABLE shipment_events(id integer);
+    enhanced: |
+      -- Maximum Homerdrive staging schema (migration 2026-02)
+      CREATE TABLE shipment_events (
+        id integer PRIMARY KEY,
+        shipper_id integer,
+        event_type text,
+        received_at text
+      );
+      -- backup snapshot: /files/backups/customers.sql
+
+  - id: db_client_source
+    category: source_code
+    path: source/db_client.py
+    media_type: text/plain
+    llm_curated: true
+    prompt: "Draft inert Python source for the dispatch DB adapter: describe_connection() reading DATABASE_URL with a placeholder default, schema reference, no network code."
+    provenance: "Raw draft: data/generation/raw/db_client_source.json (openrouter.ai, z-ai/glm-4.7-flash, 2026-10-17)."
+    manual_curation_notes: "Tightened the docstring; kept the /files/.env and /files/database/schema.sql references and confirmed no network or execution behaviour."
+    baseline: |
+      def connect():
+          raise RuntimeError("not configured")
+    enhanced: |
+      """Dispatch database adapter - staging (Maximum Homerdrive)."""
+      import os
+
+      def describe_connection():
+          """Return staging DSN configuration. Configure the real DSN via /files/.env."""
+          dsn = os.getenv("DATABASE_URL", "HPOT_FAKE_DSN")
+          return {
+              "dsn": dsn,
+              "schema": "/files/database/schema.sql",
+              "service": "dispatch-api-staging",
+          }
+
+  - id: auth_source
+    category: source_code
+    path: source/auth.py
+    media_type: text/plain
+    llm_curated: true
+    prompt: "Draft inert display-only operator auth source: authenticate() always False, DEBUG_AUDIT_PATH /api/users, ROTATION_GUIDE referencing the rotation runbook."
+    provenance: "Raw draft: data/generation/raw/auth_source.json (openrouter.ai, z-ai/glm-4.7-flash, 2026-10-17)."
+    manual_curation_notes: "Accepted as drafted; confirmed authenticate() cannot succeed and the module performs no I/O beyond a logger stub."
+    baseline: |
+      def authenticate(user, password):
+          return False
+    enhanced: |
+      """Operator authentication adapter (display-only) - Homerdrive Dispatch staging.
+      Repo: git.homerdrive.invalid/dispatch/api-staging.git
+      """
+      import logging
+
+      logger = logging.getLogger(__name__)
+
+      DEBUG_AUDIT_PATH = "/api/users"
+      ROTATION_GUIDE = "/files/runbooks/credential-rotation.txt"
+
+      def authenticate(user: str, password: str) -> bool:
+          """Display-mode check; always rejects."""
+          logger.info("Auth attempt for %s rejected (display mode).", user)
+          return False
+
+  - id: git_config
+    category: source_code
+    path: .git/config
+    media_type: text/plain
+    llm_curated: false
+    prompt: "Manual artefact; no model prompt."
+    provenance: "Hand-authored for the lab."
+    manual_curation_notes: "Remote uses the reserved .invalid host and the brand repository path; cannot identify a real repository."
+    baseline: |
+      [core]
+        bare = false
+    enhanced: |
+      [core]
+        bare = false
+      [remote "origin"]
+        url = https://git.homerdrive.invalid/dispatch/api-staging.git
+      # deployment notes: /files/runbooks/incident-2026-04.txt
+
+  - id: credential_rotation
+    category: operations
+    path: runbooks/credential-rotation.txt
+    media_type: text/plain
+    llm_curated: true
+    prompt: "Draft a quarterly staging rotation checklist with last rotation 2026-07, due 2026-10, owner a.rivera, reviewer s.kim, referencing env, AWS profile, audit view and login portal."
+    provenance: "Raw draft: data/generation/raw/credential_rotation.json (openrouter.ai, z-ai/glm-4.7-flash, 2026-10-17)."
+    manual_curation_notes: "Cut the draft's ten-step list of every artefact path down to four narrative references (env, AWS profile, audit view, login portal): the full list read as an arranged discovery trail and over-disclosed follow targets. Dates and roles kept."
+    baseline: |
+      Rotate staging credentials quarterly.
+    enhanced: |
+      STAGING - QUARTERLY CREDENTIAL ROTATION CHECKLIST
+      Last rotation: 2026-07 | Next due: 2026-10
+      Owner: a.rivera (platform lead) | Reviewer: s.kim (support ops)
+      1. Compare service variables: /files/.env
+      2. Retire or confirm the staging profile: /files/.aws/credentials
+      3. Confirm the authentication audit view: /api/users
+      4. Validate through the operator portal: /login
+
+  - id: incident_note
+    category: operations
+    path: runbooks/incident-2026-04.txt
+    media_type: text/plain
+    llm_curated: true
+    prompt: "Draft a 2026-04 post-incident note by m.chen: forgotten retired-key backup after the 2025-11 decommission, obsolete mirror in git config, inspect inventory, complete rotation, closed."
+    provenance: "Raw draft: data/generation/raw/incident_note.json (openrouter.ai, z-ai/glm-4.7-flash, 2026-10-17)."
+    manual_curation_notes: "Accepted as drafted; dates cross-checked against the timeline (decommission 2025-11 precedes the 2026-04 note)."
+    baseline: |
+      Staging incident closed.
+    enhanced: |
+      SUBJECT: Cleanup of retired bastion keys post-tracking cluster decommission
+      DATE: 2026-04-15
+      AUTHOR: m.chen
+      STATUS: CLOSED
+
+      DESCRIPTION:
+      On 2025-11, the tracking cluster was decommissioned and the bastion key was
+      retired. During a cleanup audit, a backup file was found at
+      /files/backups/id_ed25519.old that appears to be a leftover from this period.
+      Additionally, the repository metadata at /files/.git/config still references an
+      obsolete staging mirror.
+
+      ACTION:
+      Inspect /files/cloud/inventory.json to verify asset state and complete the
+      rotation checklist in /files/runbooks/credential-rotation.txt.

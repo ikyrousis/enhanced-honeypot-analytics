@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Access denied{% endblock %}
+{% block content %}
+<section>
+  <h1 class="hd-warn-text">Access denied</h1>
+  <p class="hd-warn">Your account is not authorized to view this resource.</p>
+  <div class="hd-panel">
+    <div class="hd-row">
+      <span class="hd-muted">Request reference</span>
+      <code>{{ request_id }}</code>
+    </div>
+    {% if links %}
+    <details class="hd-debug">
+      <summary>staging debug verbosity (disable in production profile)</summary>
+      <p class="hd-muted">Diagnostics referenced by the current staging deployment:</p>
+      <ul>{% for link in links %}<li><a href="{{ link }}">{{ link }}</a></li>{% endfor %}</ul>
+    </details>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,49 @@
+playbooks:
+  - id: broad_recon
+    description: Enumerate discovery surfaces and pursue whatever configuration leads they disclose.
+    steps:
+      - {method: GET, path: /}
+      - {method: GET, path: /robots.txt}
+      - {method: GET, path: /api/status}
+      - {method: GET, path: /missing}
+
+  - id: credential_hunter
+    description: Search environment, cloud-credential and retired-key artefacts for access material.
+    steps:
+      - {method: GET, path: /robots.txt}
+      - {method: GET, path: /files/.env}
+      - {method: GET, path: /files/.aws/credentials}
+      - {method: GET, path: /files/backups/id_ed25519.old}
+
+  - id: admin_login
+    description: Probe administrative access and submit a fake credential pair.
+    steps:
+      - {method: GET, path: /admin}
+      - {method: GET, path: /login}
+      - method: POST
+        path: /login
+        form: {username: staging_admin, password: HPOT_FAKE_PASSWORD}
+
+  - id: database_collector
+    description: Trace API data into the schema, backup and data-access source.
+    steps:
+      - {method: GET, path: /api/status}
+      - {method: GET, path: /api/users}
+      - {method: GET, path: /files/database/schema.sql}
+      - {method: GET, path: /files/backups/customers.sql}
+
+  - id: source_mapper
+    description: Inspect repository metadata and source-code references.
+    steps:
+      - {method: GET, path: /files/.git/config}
+      - {method: GET, path: /files/source/auth.py}
+      - {method: GET, path: /files/source/db_client.py}
+      - {method: GET, path: /api/users, params: {format: json}}
+
+  - id: cloud_mapper
+    description: Trace cloud inventory into deployment and service configuration.
+    steps:
+      - {method: GET, path: /files/.aws/credentials}
+      - {method: GET, path: /files/cloud/inventory.json}
+      - {method: GET, path: /files/cloud/task-definition.json}
+      - {method: GET, path: /api/status, params: {format: json, detail: full}}

@@ -1,0 +1,32 @@
+{
+  "artefact_id": "db_client_source",
+  "requested_model": "z-ai/glm-4.7-flash",
+  "reported_model": "z-ai/glm-4.7-flash",
+  "created_at": "2026-10-17T15:15:30.030353+00:00",
+  "temperature": 0.7,
+  "prompt": "You are drafting one decoy artefact for a fictional company used in a\nsecurity-teaching honeypot lab. Brand facts you MUST follow exactly:\n- Company: Maximum Homerdrive, B2B logistics SaaS (\"Homerdrive Dispatch\"), ~85 staff,\n  founded 2016, HQ Rotterdam. This artefact lives in the STAGING environment.\n- Domains: only *.invalid (emails first.last@homerdrive.invalid; hosts\n  api.internal.homerdrive.invalid, db.internal.homerdrive.invalid,\n  git.homerdrive.invalid, registry.internal.homerdrive.invalid).\n- Identifiers: AWS profile homerdrive-staging; buckets\n  homerdrive-freight-archive-staging and homerdrive-dispatch-backups; services\n  dispatch-api, tracking-worker, billing-sync; repo\n  git.homerdrive.invalid/dispatch/api-staging.git.\n- Staff: a.rivera (platform lead), m.chen (SRE on-call), s.kim (support ops).\n- Timeline: 2025-11 tracking cluster decommissioned and bastion key retired;\n  2026-02 schema migration to shipment_events; 2026-04 incident note; 2026-07 last\n  credential rotation; 2026-10 rotation due.\nSAFETY RULES (absolute):\n- Everything is invented. No real companies, people, hosts, credentials or personal data.\n- Credential-shaped values must be visibly unusable placeholders (e.g. invalid_*,\n  HPOT_FAKE_*). No value may be a working secret or match real secret formats\n  (no AKIA... keys, no real-shaped JWTs, no valid PEM private keys).\n- Never include operational intrusion guidance; narrative references only.\nOUTPUT RULES:\n- Output ONLY the artefact file content, no explanations, no markdown fences.\n- Keep it short and mundane (internal ops voice, not marketing).\n- Cross-references to other decoys must use exactly these portal paths when needed:\n  /files/.env, /files/.aws/credentials, /files/backups/id_ed25519.old,\n  /files/cloud/inventory.json, /files/cloud/task-definition.json,\n  /files/backups/customers.sql, /files/database/schema.sql, /files/source/db_client.py,\n  /files/source/auth.py, /files/.git/config, /files/runbooks/credential-rotation.txt,\n  /files/runbooks/incident-2026-04.txt, /api/users, /login\n\nARTEFACT TASK:\nDraft inert Python source for the dispatch database adapter: a module docstring, and a describe_connection() function returning a dict with a dsn read from the DATABASE_URL environment variable defaulting to a comment referencing the .env portal path, and a schema field referencing the schema.sql portal path. No network calls, no executable attack code.",
+  "raw_output": "\"\"\"\nDispatch Database Adapter - Staging Environment\nMaximum Homerdrive - Homerdrive Dispatch API\n\"\"\"\n\nimport os\n\ndef describe_connection():\n    \"\"\"\n    Returns configuration details for the dispatch database adapter in the staging environment.\n\n    If the DATABASE_URL environment variable is not set, the system defaults to a placeholder.\n    Please configure the correct DSN in the portal at /files/.env.\n    \"\"\"\n    dsn = os.getenv(\"DATABASE_URL\", \"HPOT_FAKE_DSN\")\n    return {\n        \"dsn\": dsn,\n        \"schema\": \"/files/database/schema.sql\",\n        \"service\": \"dispatch-api-staging\"\n    }",
+  "usage": {
+    "prompt_tokens": 589,
+    "completion_tokens": 3900,
+    "total_tokens": 4489,
+    "cost": 0.00156929,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 521,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.00156929,
+      "upstream_inference_prompt_cost": 9.29e-06,
+      "upstream_inference_completions_cost": 0.00156
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 4063,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

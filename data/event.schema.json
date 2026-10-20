@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Controlled HTTP interaction",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "timestamp", "session_id", "server_session", "playbook_id", "condition", "sequence",
+    "method", "path", "query_keys", "status_code", "artefact_id",
+    "artefact_category", "intent_labels", "follow_through",
+    "disclosed_before", "disclosed_here"
+  ],
+  "properties": {
+    "timestamp": {"type": "string", "format": "date-time"},
+    "session_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]{1,80}$"},
+    "server_session": {"type": "string", "pattern": "^[a-f0-9]{32}$"},
+    "playbook_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]{1,80}$"},
+    "condition": {"enum": ["baseline", "enhanced"]},
+    "sequence": {"type": "integer", "minimum": 1},
+    "method": {"type": "string"},
+    "path": {"type": "string", "maxLength": 2048},
+    "query_keys": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "maxLength": 80}
+    },
+    "status_code": {"type": "integer", "minimum": 100, "maximum": 599},
+    "artefact_id": {"type": ["string", "null"]},
+    "artefact_category": {"type": ["string", "null"]},
+    "intent_labels": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"enum": ["reconnaissance", "credential_access", "privilege_seeking", "collection"]}
+    },
+    "follow_through": {"type": "boolean"},
+    "disclosed_before": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "maxLength": 2048}
+    },
+    "disclosed_here": {
+      "type": "array", "uniqueItems": true,
+      "items": {"type": "string", "maxLength": 2048}
+    }
+  }
+}

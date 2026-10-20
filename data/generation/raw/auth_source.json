@@ -1,0 +1,32 @@
+{
+  "artefact_id": "auth_source",
+  "requested_model": "z-ai/glm-4.7-flash",
+  "reported_model": "z-ai/glm-4.7-flash",
+  "created_at": "2026-10-17T15:15:51.785919+00:00",
+  "temperature": 0.7,
+  "prompt": "You are drafting one decoy artefact for a fictional company used in a\nsecurity-teaching honeypot lab. Brand facts you MUST follow exactly:\n- Company: Maximum Homerdrive, B2B logistics SaaS (\"Homerdrive Dispatch\"), ~85 staff,\n  founded 2016, HQ Rotterdam. This artefact lives in the STAGING environment.\n- Domains: only *.invalid (emails first.last@homerdrive.invalid; hosts\n  api.internal.homerdrive.invalid, db.internal.homerdrive.invalid,\n  git.homerdrive.invalid, registry.internal.homerdrive.invalid).\n- Identifiers: AWS profile homerdrive-staging; buckets\n  homerdrive-freight-archive-staging and homerdrive-dispatch-backups; services\n  dispatch-api, tracking-worker, billing-sync; repo\n  git.homerdrive.invalid/dispatch/api-staging.git.\n- Staff: a.rivera (platform lead), m.chen (SRE on-call), s.kim (support ops).\n- Timeline: 2025-11 tracking cluster decommissioned and bastion key retired;\n  2026-02 schema migration to shipment_events; 2026-04 incident note; 2026-07 last\n  credential rotation; 2026-10 rotation due.\nSAFETY RULES (absolute):\n- Everything is invented. No real companies, people, hosts, credentials or personal data.\n- Credential-shaped values must be visibly unusable placeholders (e.g. invalid_*,\n  HPOT_FAKE_*). No value may be a working secret or match real secret formats\n  (no AKIA... keys, no real-shaped JWTs, no valid PEM private keys).\n- Never include operational intrusion guidance; narrative references only.\nOUTPUT RULES:\n- Output ONLY the artefact file content, no explanations, no markdown fences.\n- Keep it short and mundane (internal ops voice, not marketing).\n- Cross-references to other decoys must use exactly these portal paths when needed:\n  /files/.env, /files/.aws/credentials, /files/backups/id_ed25519.old,\n  /files/cloud/inventory.json, /files/cloud/task-definition.json,\n  /files/backups/customers.sql, /files/database/schema.sql, /files/source/db_client.py,\n  /files/source/auth.py, /files/.git/config, /files/runbooks/credential-rotation.txt,\n  /files/runbooks/incident-2026-04.txt, /api/users, /login\n\nARTEFACT TASK:\nDraft inert Python source for the operator authentication adapter: a module docstring marking it display-only, an authenticate(user, password) function that always returns False, a DEBUG_AUDIT_PATH constant set to /api/users and a ROTATION_GUIDE constant referencing the rotation runbook portal path.",
+  "raw_output": "\"\"\"\nOperator Authentication Adapter (Display-Only)\n==============================================\nStub module for Homerdrive Dispatch (STAGING).\nThis adapter is display-only and does not perform real authentication.\nRepo: git.homerdrive.invalid/dispatch/api-staging.git\n\"\"\"\nimport logging\n\nlogger = logging.getLogger(__name__)\n\nDEBUG_AUDIT_PATH = \"/api/users\"\nROTATION_GUIDE = \"/files/runbooks/credential-rotation.txt\"\n\ndef authenticate(user: str, password: str) -> bool:\n    \"\"\"\n    Simulates authentication validation.\n    Always returns False.\n    \"\"\"\n    logger.info(f\"Auth attempt for {user} rejected (Display Mode).\")\n    return False",
+  "usage": {
+    "prompt_tokens": 579,
+    "completion_tokens": 1657,
+    "total_tokens": 2236,
+    "cost": 0.00069729,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 5,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.00069729,
+      "upstream_inference_prompt_cost": 3.449e-05,
+      "upstream_inference_completions_cost": 0.0006628
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 1683,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

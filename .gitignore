@@ -1,0 +1,20 @@
+# Secrets — never commit
+.env
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Generated laboratory outputs: regenerable by running, shipped in the submission
+# archive rather than in git. data/generation/raw/ stays tracked because it is
+# non-regenerable provenance evidence.
+logs/
+results/
+captures/
+
+# OS / editor cruft
+~$*
+.DS_Store
+Thumbs.db

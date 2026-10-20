@@ -1,0 +1,32 @@
+{
+  "artefact_id": "incident_note",
+  "requested_model": "z-ai/glm-4.7-flash",
+  "reported_model": "z-ai/glm-4.7-flash",
+  "created_at": "2026-10-17T15:16:47.396785+00:00",
+  "temperature": 0.7,
+  "prompt": "You are drafting one decoy artefact for a fictional company used in a\nsecurity-teaching honeypot lab. Brand facts you MUST follow exactly:\n- Company: Maximum Homerdrive, B2B logistics SaaS (\"Homerdrive Dispatch\"), ~85 staff,\n  founded 2016, HQ Rotterdam. This artefact lives in the STAGING environment.\n- Domains: only *.invalid (emails first.last@homerdrive.invalid; hosts\n  api.internal.homerdrive.invalid, db.internal.homerdrive.invalid,\n  git.homerdrive.invalid, registry.internal.homerdrive.invalid).\n- Identifiers: AWS profile homerdrive-staging; buckets\n  homerdrive-freight-archive-staging and homerdrive-dispatch-backups; services\n  dispatch-api, tracking-worker, billing-sync; repo\n  git.homerdrive.invalid/dispatch/api-staging.git.\n- Staff: a.rivera (platform lead), m.chen (SRE on-call), s.kim (support ops).\n- Timeline: 2025-11 tracking cluster decommissioned and bastion key retired;\n  2026-02 schema migration to shipment_events; 2026-04 incident note; 2026-07 last\n  credential rotation; 2026-10 rotation due.\nSAFETY RULES (absolute):\n- Everything is invented. No real companies, people, hosts, credentials or personal data.\n- Credential-shaped values must be visibly unusable placeholders (e.g. invalid_*,\n  HPOT_FAKE_*). No value may be a working secret or match real secret formats\n  (no AKIA... keys, no real-shaped JWTs, no valid PEM private keys).\n- Never include operational intrusion guidance; narrative references only.\nOUTPUT RULES:\n- Output ONLY the artefact file content, no explanations, no markdown fences.\n- Keep it short and mundane (internal ops voice, not marketing).\n- Cross-references to other decoys must use exactly these portal paths when needed:\n  /files/.env, /files/.aws/credentials, /files/backups/id_ed25519.old,\n  /files/cloud/inventory.json, /files/cloud/task-definition.json,\n  /files/backups/customers.sql, /files/database/schema.sql, /files/source/db_client.py,\n  /files/source/auth.py, /files/.git/config, /files/runbooks/credential-rotation.txt,\n  /files/runbooks/incident-2026-04.txt, /api/users, /login\n\nARTEFACT TASK:\nDraft a plain-text post-incident note dated 2026-04 authored by m.chen: finding that a retired key-shaped backup remained at the id_ed25519.old portal path after the 2025-11 tracking cluster decommission; context that repository metadata at the .git/config portal path referenced an obsolete staging mirror; action to inspect the cloud inventory portal path and complete the rotation checklist; status closed.",
+  "raw_output": "SUBJECT: Cleanup of retired bastion keys post-tracking cluster decommission\nDATE: 2026-04-15\nAUTHOR: m.chen\nSTATUS: CLOSED\n\nDESCRIPTION:\nOn 2025-11, the tracking cluster was decommissioned and the bastion key was retired. During a cleanup audit, a backup file was found at /files/backups/id_ed25519.old that appears to be a leftover from this period. Additionally, the repository metadata at /files/.git/config still references an obsolete staging mirror.\n\nAction required: Inspect /files/cloud/inventory.json to verify asset state and complete the rotation checklist in /files/runbooks/credential-rotation.txt.",
+  "usage": {
+    "prompt_tokens": 605,
+    "completion_tokens": 1477,
+    "total_tokens": 2082,
+    "cost": 0.00060105,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 521,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.00060105,
+      "upstream_inference_prompt_cost": 1.025e-05,
+      "upstream_inference_completions_cost": 0.0005908
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 1356,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}
